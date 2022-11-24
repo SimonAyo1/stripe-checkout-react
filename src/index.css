@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
+
+:root {
+  --light-grey: #f6f9fc;
+  --dark-terminal-color: #0a2540;
+  --accent-color: #635bff;
+  --radius: 3px;
+}
+
+body {
+
+  font-family: "Raleway";
+  display: flex;
+  justify-content: center;
+  font-size: 1.2em;
+  color: var(--dark-terminal-color);
+}
+
+@media screen and (min-width: 601px) {
+main {
+  width: 600px;
+}
+}
+@media screen and (max-width: 600px) {
+main {
+  max-width: inherit
+}
+
+}
+
+form > * {
+  margin: 10px 0;
+}
+
+button {
+  background-color: var(--accent-color);
+}
+
+button {
+  background: var(--accent-color);
+  border-radius: var(--radius);
+  color: white;
+  border: 0;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+}
+button:hover {
+  filter: contrast(115%);
+}
+button:active {
+  transform: translateY(0px) scale(0.98);
+  filter: brightness(0.9);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: none;
+}
+
+input,
+select {
+  display: block;
+  font-size: 1.1em;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+}
+
+a {
+  color: var(--accent-color);
+  font-weight: 900;
+}
+
+small {
+  font-size: 0.6em;
+}
+
+fieldset,
+input,
+select {
+  border: 1px solid #efefef;
+}
+
+#payment-form {
+  border: #f6f9fc solid 1px;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%),
+    0 30px 60px -30px rgb(0 0 0 / 30%);
+}
+
+#messages {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
+  display: none; /* hide initially, then show once the first message arrives */
+  background-color: #0a253c;
+  color: #00d924;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: var(--radius);
+  font-size: 0.7em;
+}
+h1 {
+         
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-weight: 900;
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+        p {
+          color: #404F5E;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-size:20px;
+          margin: 0;
+        }
+      i {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
+      .card {
+        background: white;
+        padding: 60px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+      }
+      .spinner {
+    margin: 20px auto;
+    width: 500px;
+    height: 450px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative
+}
+
+.spinner .circle {
+    animation: spinners linear infinite;
+    position: absolute;
+    border: 5px solid transparent;
+    border-top-color: rgb(73, 19, 19);
+    border-radius: 50%
+}
+
+.spinner .one {
+    width: 50px;
+    height: 50px;
+    border-top-color: #2982d6;
+    animation-duration: .85s
+}
+
+.spinner .two {
+    width: 70px;
+    height: 70px;
+    border-top-color: #0a3d93;
+    animation-duration: .95s
+}
+
+.spinner .three {
+    width: 100px;
+    height: 100px;
+    border-top-color: #1585e0;
+    animation-duration: 1.05s
+}
+
+
+@keyframes spinners {
+    0% {
+        transform: rotate(0deg)
+    }
+    
+    100% {
+        transform: rotate(360deg)
+    }
+}
