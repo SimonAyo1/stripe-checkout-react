@@ -20,10 +20,10 @@ function Completion(props) {
       userId: userId,
       method: "stripe",
       amount: amountPayed,
-      company_name: customerName,
-      customer_id: customerId,
+      companyName: customerName,
+      customerId: customerId,
       status: "success",
-      date: date.toISOString(),
+      date: date.toUTCString(),
     });
   };
   const clientst = JSON.parse(localStorage.getItem("clientSt"));
