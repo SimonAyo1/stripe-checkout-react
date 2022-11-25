@@ -1,8 +1,10 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { useSelector } from "react-redux";
 
 export default function CheckoutForm() {
+  const clientSecret = useSelector((state) => state.secret.secret);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -20,14 +22,13 @@ export default function CheckoutForm() {
 
     setIsProcessing(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `${window.location.origin}/completion`,
+        return_url: `${window.location.origin}/completion/${clientSecret}`,
       },
     })
-
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message);
     } else {

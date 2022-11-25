@@ -11,7 +11,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/:userId/:customerId/:amount" element={<Payment />} />
-            <Route path="/completion" element={<Completion />} />
+            <Route path="/completion/:secret" element={<Completion />} />
           </Routes>
         </BrowserRouter>
       </main>

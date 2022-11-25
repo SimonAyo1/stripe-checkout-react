@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
-  import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { CircularProgress } from "@mui/material";
-  import { collection, query, where, getDocs } from "firebase/firestore";
-  import { loadStripe } from "@stripe/stripe-js";
-  import { db } from "./firebase-config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { loadStripe } from "@stripe/stripe-js";
+import { useDispatch } from "react-redux";
+import { db } from "./firebase-config";
 import CheckoutForm from "./CheckoutForm";
-
-
+import { secretActions } from "./store/clientSecret/ClientSecretSlice";
+import Completion from "./Completion";
 
 function Payment() {
+  const { secret } = useParams();
+  const dispatch = useDispatch();
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
-  const [isLoading, setIsLoading] = useState(true)
-
+  const [isLoading, setIsLoading] = useState(true);
 
   let { userId, customerId, amount } = useParams();
   // console.log(userId)
@@ -21,10 +23,10 @@ function Payment() {
     company_name: null,
   });
   const fetchData = async (id) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const req = query(collection(db, "users"), where("userId", "==", `${id}`));
     const querySnapshot = await getDocs(req).catch((e) => {
-      setIsLoading(false)
+      setIsLoading(false);
       // console.log(e);
     });
     querySnapshot.forEach((doc) => {
@@ -34,12 +36,16 @@ function Payment() {
       setData({
         company_name: doc.data().company,
       });
+      localStorage.setItem(
+        "customerName",
+        JSON.stringify({ customerName: doc.data().company })
+      );
     });
   };
 
   useEffect(() => {
-  fetchData(userId)
-  }, [])
+    fetchData(userId);
+  }, []);
 
   useEffect(() => {
     fetch("https://api-tfconvert.vercel.app/api/config").then(async (r) => {
@@ -55,16 +61,28 @@ function Payment() {
       body: JSON.stringify({}),
     }).then(async (result) => {
       var { clientSecret } = await result.json();
+      dispatch(secretActions.addSecret(clientSecret));
+      localStorage.setItem("clientSt", JSON.stringify({ cs: clientSecret }));
+      localStorage.setItem("userId", JSON.stringify({ userId: userId }));
+      localStorage.setItem(
+        "customerId",
+        JSON.stringify({ customerId: customerId })
+      );
+      localStorage.setItem(
+        "amountPayed",
+        JSON.stringify({ amountPayed: amount })
+      );
       setClientSecret(clientSecret);
     });
   }, []);
 
   return (
     <>
-      <p style={{marginTop: 20}}>
-        Billing Company: { isLoading ? (<CircularProgress size={18} />)  : data.company_name}
+      <p style={{ marginTop: 20 }}>
+        Billing Company:{" "}
+        {isLoading ? <CircularProgress size={18} /> : data.company_name}
       </p>
-      {clientSecret && stripePromise ? (
+      {!isLoading && clientSecret && stripePromise ? (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />
         </Elements>
