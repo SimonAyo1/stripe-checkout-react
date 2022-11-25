@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "./firebase-config";
 
 function Completion(props) {
@@ -32,6 +40,23 @@ function Completion(props) {
   const customerName = JSON.parse(localStorage.getItem("customerName"));
   const amountPayed = JSON.parse(localStorage.getItem("amountPayed"));
 
+  const updateBalance = async (docId, prevBal) => {
+    const balRef = doc(db, "users", `${docId}`);
+    await updateDoc(balRef, {
+      balance: prevBal + parseInt(amountPayed.amountPayed),
+    });
+  };
+  const updateUserBalance = async (id) => {
+    const req = query(collection(db, "users"), where("userId", "==", `${id}`));
+    const querySnapshot = await getDocs(req);
+
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+
+      updateBalance(doc.id, doc.data().balance);
+    });
+  };
+
   const checkIfClientSecretExists = async (client_secret) => {
     const req = query(
       collection(db, "users_customer_payments"),
@@ -46,6 +71,7 @@ function Completion(props) {
         customerName.customerName,
         amountPayed.amountPayed
       );
+      updateUserBalance(userId.userId);
     }
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
