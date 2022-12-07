@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch } from "react-redux";
 import { db } from "./firebase-config";
 import CheckoutForm from "./CheckoutForm";
 import { secretActions } from "./store/clientSecret/ClientSecretSlice";
-import Completion from "./Completion";
 
 function Payment() {
-  const { secret } = useParams();
   const dispatch = useDispatch();
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   let { userId, customerId, amount } = useParams();
+  const parsedAmount = parseInt(amount, 10);
+  const isAmountValid = !isNaN(parsedAmount);
   // console.log(userId)
   const [data, setData] = useState({
     company_name: null,
@@ -76,8 +76,11 @@ function Payment() {
     });
   }, []);
 
-  return (
+  return isAmountValid ? (
     <>
+      <p style={{ marginTop: 20 }}>
+        You are paying <b>${parsedAmount}</b> to
+      </p>
       <p style={{ marginTop: 20 }}>
         Billing Company:{" "}
         {isLoading ? <CircularProgress size={18} /> : data.company_name}
@@ -94,6 +97,10 @@ function Payment() {
         </div>
       )}
     </>
+  ) : (
+    <Alert severity="error">
+      Invallid URL Parameter, ERROR: INVALID AMOUNT "{amount}"
+    </Alert>
   );
 }
 
