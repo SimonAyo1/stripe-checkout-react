@@ -38,7 +38,7 @@ function Header() {
     <AppBar position="static" style={{ backgroundColor: "#0a3d93" }}>
       <Container maxWidth="xl" style={{ textAlign: "center" }}>
         <Toolbar disableGutters>
-          <h3>TFConvert Payment Portal</h3>
+          <h3>FTconvert Payment Portal</h3>
         </Toolbar>
       </Container>
     </AppBar>
