@@ -1,4 +1,4 @@
-# Stripe payment backend + React
+# Stripe payment React
 
 ## How to run locally
 
@@ -18,4 +18,4 @@ npm install
 npm start
 ```
 react server runs on localhost:4242.
-backend server runs on localhost:5252
+
